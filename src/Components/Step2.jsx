@@ -39,8 +39,7 @@ const Step2 = ({ order, submitOrder }) => {
           my={8}
         >
           <Text>
-            <Text fontWeight="bold">Full name:</Text> {order.firstName}{" "}
-            {order.lastName}
+            <Text fontWeight="bold">Full name:</Text> {order.firstName}
           </Text>
           <Text>
             <Text fontWeight="bold">Email:</Text> {order.email}

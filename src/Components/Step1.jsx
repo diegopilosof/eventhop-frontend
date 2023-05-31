@@ -10,7 +10,6 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import axios from "axios";
 import { server } from "../App";
 
 const Step1 = ({ changeOrder, addStep }) => {
@@ -40,7 +39,27 @@ const Step1 = ({ changeOrder, addStep }) => {
       initAutocomplete();
     }
   }, []);
+
+  function getHaversineDistance(lat1, lon1, lat2, lon2) {
+    function toRad(x) {
+      return x * Math.PI / 180;
+    }
   
+    var R = 6371; // km 
+    var dLat = toRad(lat2 - lat1);
+    var dLon = toRad(lon2 - lon1);
+    var lat1 = toRad(lat1);
+    var lat2 = toRad(lat2);
+  
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2); 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
+    var d = R * c;
+    
+    return d;
+  }
+  
+
       const handleRequest = async (e) =>{
         e.preventDefault();
         const splittedDate = formState.date.split("-");
@@ -69,9 +88,9 @@ const Step1 = ({ changeOrder, addStep }) => {
               DayHour: `${weekday}_${Number(hour[0])-1}` 
           };
           const response = await server.post('/order/calc',obj)
-          console.log(response.data);
           formState.price = Math.floor(response.data);
           formState.place = place.formatted_address
+          formState.address = place.formatted_address
           changeOrder(formState);
           addStep();
         } catch (error) {
@@ -161,10 +180,10 @@ const Step1 = ({ changeOrder, addStep }) => {
                 onChange={handleChange}
                 borderRadius={10}
               >
-                <option value="option1">1</option>
-                <option value="option2">2</option>
-                <option value="option3">3</option>
-                <option value="option3">4</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
               </Select>
             </FormControl>
             <FormControl>

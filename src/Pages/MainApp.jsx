@@ -13,6 +13,7 @@ import {
   useSteps,
   Center,
   Image,
+  Text
 } from "@chakra-ui/react";
 import Step1 from "../Components/Step1";
 import Step2 from "../Components/Step2";
@@ -53,15 +54,17 @@ const MainApp = () => {
   async function submitOrder() {
     try {
       const inputDate = order.arrivalTime.split(":");
-      const newDate = new Date();
+      const newDate = new Date(order.date);
       newDate.setHours(inputDate[0]);
       newDate.setMinutes(inputDate[1]);
 
       const serverOrder = { ...order };
       serverOrder.arrivalTime = newDate;
+      serverOrder.firstName = order.firstName.split(" ")[0];
+      serverOrder.lastName = order.firstName.split(" ")[1];
+      serverOrder.address = order.place
 
       const response = await server.post("/order", serverOrder);
-      console.log(response.data);
       setOrder(response.data);
       addStep();
       return { error: "" };
