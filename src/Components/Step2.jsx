@@ -138,7 +138,9 @@ const Step2 = ({ order, submitOrder }) => {
         <Text>
           <Text fontWeight="bold">Price:</Text> 100$
         </Text>
-        <Button onClick={submit}>Submit</Button>
+        <Button onClick={submit} colorScheme="yellow" mt={4}>
+          Submit
+        </Button>
       </Box>
     </Flex>
   );

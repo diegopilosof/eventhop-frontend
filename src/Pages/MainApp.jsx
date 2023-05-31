@@ -12,11 +12,14 @@ import {
   Stepper,
   useSteps,
   Center,
+  Image,
 } from "@chakra-ui/react";
 import Step1 from "../Components/Step1";
 import Step2 from "../Components/Step2";
 import Step3 from "../Components/Step3";
 import { server } from "../App";
+import taxi from "../Design/taxi.jpg";
+import logo from "../Design/logo.jpg";
 
 const MainApp = () => {
   const steps = [
@@ -25,14 +28,13 @@ const MainApp = () => {
     { title: "Book", description: "Confirm and book your ride!" },
   ];
   const [order, setOrder] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    passengers: '',
-    arrivalTime: '',
-    address: '',
-    date: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    passengers: "",
+    arrivalTime: "",
+    address: "",
   });
   const { activeStep, setActiveStep } = useSteps({
     index: 0,
@@ -54,25 +56,44 @@ const MainApp = () => {
       newDate.setHours(inputDate[0]);
       newDate.setMinutes(inputDate[1]);
 
-      const serverOrder = {...order};
+      const serverOrder = { ...order };
       serverOrder.arrivalTime = newDate;
 
       const response = await server.post("/order", serverOrder);
       console.log(response.data);
       setOrder(response.data);
       addStep();
-      return {error: ""}
+      return { error: "" };
     } catch (error) {
       console.log(error.message);
-      return {error: error.message}
+      return { error: error.message };
     }
   }
 
   return (
     <div className="MainApp">
-      <Heading>Event Hop</Heading>
-      <Center my={5}>
-        <Stepper size="lg" index={activeStep} colorScheme="yellow">
+      <Box>
+        <Image
+          src={taxi}
+          alt="logo"
+          w="100%"
+          h="180px"
+          objectFit="cover"
+          objectPosition="75% 75%"
+          mb={5}
+        />
+      </Box>
+      <Heading display="flex" justifyContent="center" alignItems="center">
+        <Image src={logo} alt="logo" w="80px" />
+      </Heading>
+      <Center mb={5}>
+        <Stepper
+          size="lg"
+          index={activeStep}
+          colorScheme="yellow"
+          display="flex"
+          flexWrap="wrap"
+        >
           {steps.map((step, index) => (
             <Step key={index}>
               <StepIndicator backgroundColor="#F6E05E">
