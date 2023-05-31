@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Box, Input, Button, Select, VStack, FormControl, FormLabel, Flex } from '@chakra-ui/react';
 import { FaMapMarkerAlt } from 'react-icons/fa';
+import axios from 'axios'
 
 
 const Step1 = ({ changeOrder, addStep }) => {
@@ -36,6 +37,34 @@ const Step1 = ({ changeOrder, addStep }) => {
         }
       }, [])
       
+
+      const handleRequest = async (e) =>{
+        e.preventDefault();
+        try {
+            let date = new Date(); 
+            const obj = {
+                pickup_longitude: place.geometry.location.lng(), 
+                pickup_latitude: place.geometry.location.lat(),
+                dropoff_longitude: null, 
+                dropoff_latitude: null, 
+                passenger_count: formState.passengers,
+                Pickup_Year: date.getFullYear(),
+                Pickup_Month: date.getMonth() + 1,
+                Pickup_Day: date.getDate(),
+                Pickup_Hour: date.getHours(),
+                Pickup_Minute: date.getMinutes(),
+                Pickup_DayOfWeek: date.getDay(), 
+                Euclidean_Distance: null, 
+                DayHour: `${date.getDay()}_${date.getHours()}` 
+            };
+            // const response = await axios.post('http://localhost:8080/calc',)
+            
+        } catch (error) {
+            
+        }
+
+        
+      }
 
   const [formState, setFormState] = useState({
     firstName: '',
@@ -111,7 +140,7 @@ const Step1 = ({ changeOrder, addStep }) => {
               </Select>
             </FormControl>
           </VStack>
-          <Button type="submit">Submit</Button>
+          <Button onClick={(e)=>handleRequest(e)} type="submit">Submit</Button>
         </form>
       </Box>
     </Flex>
