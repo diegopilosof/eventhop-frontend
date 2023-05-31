@@ -1,11 +1,42 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Box, Input, Button, Select, VStack, FormControl, FormLabel, Flex } from '@chakra-ui/react';
-import { useLoadScript, StandaloneSearchBox } from '@react-google-maps/api';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 
-const libraries = ['places'];
 
 const Step1 = ({ changeOrder, addStep }) => {
+    const [place, setPlace] = useState(false)
+    const addressRef = useRef(null);
+
+    function initAutocomplete() {
+        const autocomplete = new window.google.maps.places.Autocomplete(addressRef.current);
+
+        autocomplete.addListener("place_changed", function () {
+          const place = autocomplete.getPlace();
+          if (!place.geometry) {
+            window.alert(
+              "No details available for input: '" + place.name + "'"
+            );
+            return;
+          }
+
+          setPlace(place)
+          console.log(place);
+
+          const address = place.formatted_address;
+          const lat = place.geometry.location.lat();
+          const lng = place.geometry.location.lng();
+
+          console.log(address, lat, lng);
+        });
+      }
+
+      useEffect(() => {
+        if(window.google){
+            initAutocomplete()
+        }
+      }, [])
+      
+
   const [formState, setFormState] = useState({
     firstName: '',
     lastName: '',
@@ -14,11 +45,6 @@ const Step1 = ({ changeOrder, addStep }) => {
     passengers: '',
     pickupTime: '',
     address: '',
-  });
-  
-  const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API,
-    libraries,
   });
 
   let searchBox = useRef();
@@ -29,11 +55,6 @@ const Step1 = ({ changeOrder, addStep }) => {
     
     changeOrder(formState);
     addStep();
-  };
-
-  const onPlacesChanged = () => {
-    const place = searchBox.current.getPlaces()[0];
-    setFormState(prevState => ({ ...prevState, address: place.formatted_address }));
   };
 
   const handleChange = (e) => {
@@ -52,6 +73,13 @@ const Step1 = ({ changeOrder, addStep }) => {
       <Box p={2} w="80%" bg="white" borderRadius="md" boxShadow="md">
         <form onSubmit={onSubmit}>
           <VStack align="stretch">
+          <FormLabel>
+                <Box as={FaMapMarkerAlt} boxSize={4} display="inline-block" mr={2} mb={1} />
+                Address
+            </FormLabel>
+            <div>
+                <Input ref={addressRef} type="text"/>
+            </div>
             <FormControl>
               <FormLabel>First name</FormLabel>
               <Input name='firstName' value={formState.firstName} onChange={handleChange} />
@@ -81,20 +109,6 @@ const Step1 = ({ changeOrder, addStep }) => {
                   </option>
                 ))}
               </Select>
-            </FormControl>
-            <FormControl>
-              <FormLabel>
-                <Box as={FaMapMarkerAlt} boxSize={4} display="inline-block" mr={2} mb={1} />
-                Address
-              </FormLabel>
-              {isLoaded && (
-                <StandaloneSearchBox
-                  onLoad={ref => (searchBox.current = ref)}
-                  onPlacesChanged={onPlacesChanged}
-                >
-                  <Input name='address' value={formState.address} onChange={handleChange} />
-                </StandaloneSearchBox>
-              )}
             </FormControl>
           </VStack>
           <Button type="submit">Submit</Button>
