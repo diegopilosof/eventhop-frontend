@@ -29,7 +29,9 @@ const Step3 = ({ order }) => {
               details. Sit back, relax, and enjoy your event with the peace of
               mind that transportation is taken care of.
             </Text>
-            <Button onClick={handleCloseWindow}>Done</Button>
+            <Button onClick={handleCloseWindow} colorScheme="yellow" mt={4}>
+              Done
+            </Button>
           </Flex>
         </Box>
       </Flex>

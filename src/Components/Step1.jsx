@@ -1,15 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Box, Input, Button, Select, VStack, FormControl, FormLabel, Flex } from '@chakra-ui/react';
 import { FaMapMarkerAlt } from 'react-icons/fa';
+import axios from 'axios'
 import { server } from '../App';
 
 
 const Step1 = ({ changeOrder, addStep }) => {
-    const [place, setPlace] = useState(false)
-    const addressRef = useRef(null);
+  const [place, setPlace] = useState(false);
+  const addressRef = useRef(null);
 
-    function initAutocomplete() {
-        const autocomplete = new window.google.maps.places.Autocomplete(addressRef.current);
+  function initAutocomplete() {
+    const autocomplete = new window.google.maps.places.Autocomplete(
+      addressRef.current
+    );
 
         autocomplete.addListener("place_changed", function () {
           const place = autocomplete.getPlace();
@@ -19,16 +22,16 @@ const Step1 = ({ changeOrder, addStep }) => {
             );
             return;
           }
+
           setPlace(place)
-          console.log(place);
         });
       }
 
-      useEffect(() => {
-        if(window.google){
-            initAutocomplete()
-        }
-      }, [])
+  useEffect(() => {
+    if (window.google) {
+      initAutocomplete();
+    }
+  }, []);
 
       function getHaversineDistance(lat1, lon1, lat2, lon2) {
         function toRad(x) {
@@ -55,10 +58,9 @@ const Step1 = ({ changeOrder, addStep }) => {
         e.preventDefault();
         const splittedDate = formState.date.split("-");
         const hour = formState.arrivalTime.split(':')
-        if(!place) return
         try {
             let date = new Date(Number(splittedDate[0]), Number(splittedDate[1]) - 1, Number(splittedDate[2]));
-            const weekday = date.getDay() === 0 ? 6 : date.getDay() - 1;
+        const weekday = date.getDay() === 0 ? 6 : date.getDay() - 1;
           const obj = {
               pickup_longitude: place.geometry.location.lng(), 
               pickup_latitude: place.geometry.location.lat(),
@@ -79,7 +81,6 @@ const Step1 = ({ changeOrder, addStep }) => {
               ),
               DayHour: `${weekday}_${Number(hour[0])-1}` 
           };
-          console.log(obj);
           const response = await server.post('/order/calc',obj)
           console.log(response.data);
           formState.price = Math.floor(response.data);
@@ -107,13 +108,13 @@ const Step1 = ({ changeOrder, addStep }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormState(prevState => ({ ...prevState, [name]: value }));
+    setFormState((prevState) => ({ ...prevState, [name]: value }));
   };
 
   const times = Array.from({ length: 48 }, (_, i) => {
     const hour = Math.floor(i / 2);
-    const minutes = i % 2 === 0 ? '00' : '30';
-    return `${hour.toString().padStart(2, '0')}:${minutes}`;
+    const minutes = i % 2 === 0 ? "00" : "30";
+    return `${hour.toString().padStart(2, "0")}:${minutes}`;
   });
 
   return (
@@ -121,40 +122,52 @@ const Step1 = ({ changeOrder, addStep }) => {
       <Box p={2} w="80%" bg="white" borderRadius="md" boxShadow="md">
         <form onSubmit={handleRequest}>
           <VStack align="stretch">
-          <FormLabel>
-                <Box as={FaMapMarkerAlt} boxSize={4} display="inline-block" mr={2} mb={1} />
-                Address
+            <FormLabel>
+              <Box
+                as={FaMapMarkerAlt}
+                boxSize={4}
+                display="inline-block"
+                mr={2}
+                mb={1}
+              />
+              Address
             </FormLabel>
-            <FormControl isRequired>
-                <Input required ref={addressRef} type="text"/>
+            <FormControl>
+                <Input ref={addressRef} type="text"/>
             </FormControl>
-            <FormControl isRequired>
+            <FormControl>
               <FormLabel>First name</FormLabel>
-              <Input required name='firstName' value={formState.firstName} onChange={handleChange} />
+              <Input name='firstName' value={formState.firstName} onChange={handleChange} />
             </FormControl>
-            <FormControl isRequired>
+            <FormControl>
               <FormLabel>Last name</FormLabel>
-              <Input required name='lastName' value={formState.lastName} onChange={handleChange} />
+              <Input name='lastName' value={formState.lastName} onChange={handleChange} />
             </FormControl>
             <FormControl isRequired>
               <FormLabel>Email</FormLabel>
-              <Input required name='email' value={formState.email} onChange={handleChange} />
+              <Input name='email' value={formState.email} onChange={handleChange} />
             </FormControl>
             <FormControl>
               <FormLabel>Phone number</FormLabel>
-              <Input name='phone' value={formState.phone} onChange={handleChange} />
+              <Input
+                name="phone"
+                value={formState.phone}
+                onChange={handleChange}
+                borderRadius={10}
+                placeholder="Example: 1234567890"
+              />
             </FormControl>
             <FormControl isRequired>
               <FormLabel>Passengers</FormLabel>
-              <Input required type='number' name='passengers' value={formState.passengers} onChange={handleChange} />
+              <Input type='number' name='passengers' value={formState.passengers} onChange={handleChange} />
             </FormControl>
-            <FormControl isRequired>
+            <FormControl>
                 <FormLabel>Date</FormLabel>
-                <Input required type='date' name='date' value={formState.date} onChange={handleChange} />
+                <Input type='date' name='date' value={formState.date} onChange={handleChange} />
             </FormControl>
             <FormControl isRequired>
               <FormLabel>Pickup time</FormLabel>
-              <Select required name='arrivalTime' value={formState.arrivalTime} onChange={handleChange}>
+              <Select name='arrivalTime' value={formState.arrivalTime} onChange={handleChange}>
                 {times.map(time => (
                   <option key={time} value={time}>
                     {time}

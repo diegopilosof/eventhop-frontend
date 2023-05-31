@@ -5,11 +5,9 @@
 }
 
 html,
-body,
 #root,
-.App,
-.MainApp {
-  height: 100%;
+.App {
+  height: 130%;
 }
 
 #root {
@@ -19,6 +17,6 @@ body,
 .MainApp {
   background-color: white;
   height: 100%;
-  width: 800px;
+  width: 70%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
 }
