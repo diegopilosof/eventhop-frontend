@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Step2 = () => {
+const Step2 = ({ order }) => {
   return (
     <div>Step2</div>
   )

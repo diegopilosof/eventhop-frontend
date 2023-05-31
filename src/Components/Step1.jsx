@@ -5,7 +5,7 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 
 const libraries = ['places'];
 
-const Step1 = () => {
+const Step1 = ({ changeOrder, addStep }) => {
   const [formState, setFormState] = useState({
     firstName: '',
     lastName: '',
@@ -23,8 +23,12 @@ const Step1 = () => {
 
   let searchBox = useRef();
 
-  const onSubmit = () => {
+  function onSubmit(e) {
+    e.preventDefault();
     console.log(formState);
+    
+    changeOrder(formState);
+    addStep();
   };
 
   const onPlacesChanged = () => {
@@ -93,6 +97,7 @@ const Step1 = () => {
               )}
             </FormControl>
           </VStack>
+          <Button type="submit">Submit</Button>
         </form>
       </Box>
     </Flex>
