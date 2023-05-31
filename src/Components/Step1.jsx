@@ -1,9 +1,17 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Box, Input, Button, Select, VStack, FormControl, FormLabel, Flex } from '@chakra-ui/react';
-import { FaMapMarkerAlt } from 'react-icons/fa';
-import axios from 'axios'
-import { server } from '../App';
-
+import React, { useState, useRef, useEffect } from "react";
+import {
+  Box,
+  Input,
+  Button,
+  Select,
+  VStack,
+  FormControl,
+  FormLabel,
+  Flex,
+} from "@chakra-ui/react";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import axios from "axios";
+import { server } from "../App";
 
 const Step1 = ({ changeOrder, addStep }) => {
   const [place, setPlace] = useState(false);
@@ -32,28 +40,7 @@ const Step1 = ({ changeOrder, addStep }) => {
       initAutocomplete();
     }
   }, []);
-
-      function getHaversineDistance(lat1, lon1, lat2, lon2) {
-        function toRad(x) {
-          return x * Math.PI / 180;
-        }
-      
-        var R = 6371;
-        var dLat = toRad(lat2 - lat1);
-        var dLon = toRad(lon2 - lon1);
-        var lat1 = toRad(lat1);
-        var lat2 = toRad(lat2);
-      
-        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2); 
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
-        var d = R * c;
-        
-        return d;
-      }
-      
-      
-
+  
       const handleRequest = async (e) =>{
         e.preventDefault();
         const splittedDate = formState.date.split("-");
@@ -133,19 +120,27 @@ const Step1 = ({ changeOrder, addStep }) => {
               Address
             </FormLabel>
             <FormControl>
-                <Input ref={addressRef} type="text"/>
+              <Input ref={addressRef} type="text" />
             </FormControl>
             <FormControl>
-              <FormLabel>First name</FormLabel>
-              <Input name='firstName' value={formState.firstName} onChange={handleChange} />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Last name</FormLabel>
-              <Input name='lastName' value={formState.lastName} onChange={handleChange} />
+              <FormLabel>Full Name</FormLabel>
+              <Input
+                name="firstName"
+                value={formState.firstName}
+                onChange={handleChange}
+                borderRadius={10}
+                placeholder="Example: John Doe"
+              />
             </FormControl>
             <FormControl isRequired>
               <FormLabel>Email</FormLabel>
-              <Input name='email' value={formState.email} onChange={handleChange} />
+              <Input
+                name="email"
+                value={formState.email}
+                onChange={handleChange}
+                borderRadius={10}
+                placeholder="Example: johndoe@email.com"
+              />
             </FormControl>
             <FormControl>
               <FormLabel>Phone number</FormLabel>
@@ -159,16 +154,38 @@ const Step1 = ({ changeOrder, addStep }) => {
             </FormControl>
             <FormControl isRequired>
               <FormLabel>Passengers</FormLabel>
-              <Input type='number' name='passengers' value={formState.passengers} onChange={handleChange} />
+              <Select
+                placeholder="-"
+                name="passengers"
+                value={formState.passengers}
+                onChange={handleChange}
+                borderRadius={10}
+              >
+                <option value="option1">1</option>
+                <option value="option2">2</option>
+                <option value="option3">3</option>
+                <option value="option3">4</option>
+              </Select>
             </FormControl>
             <FormControl>
-                <FormLabel>Date</FormLabel>
-                <Input type='date' name='date' value={formState.date} onChange={handleChange} />
+              <FormLabel>Date</FormLabel>
+              <Input
+                type="date"
+                name="date"
+                value={formState.date}
+                onChange={handleChange}
+                borderRadius={10}
+              />
             </FormControl>
             <FormControl isRequired>
               <FormLabel>Pickup time</FormLabel>
-              <Select name='arrivalTime' value={formState.arrivalTime} onChange={handleChange}>
-                {times.map(time => (
+              <Select
+                name="arrivalTime"
+                value={formState.arrivalTime}
+                onChange={handleChange}
+                borderRadius={10}
+              >
+                {times.map((time) => (
                   <option key={time} value={time}>
                     {time}
                   </option>

@@ -87,6 +87,9 @@ const MainApp = () => {
       <Heading display="flex" justifyContent="center" alignItems="center">
         <Image src={logo} alt="logo" w="80px" />
       </Heading>
+      <Text color="#975A16" fontSize={20} fontWeight="bold">
+        Book. Ride. Enjoy.
+      </Text>
       <Center mb={5}>
         <Stepper
           size="lg"
