@@ -15,7 +15,9 @@ import {
   Flex,
   Button,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import Step1 from "../Components/Step1";
+import Step2 from "../Components/Step2";
+import Step3 from "../Components/Step3";
 
 const MainApp = () => {
   const steps = [
@@ -31,7 +33,7 @@ const MainApp = () => {
     });
 
     return (
-      <div>
+      <div className="MainApp">
         <Heading>Event Hop</Heading>
         <Center my={5}>
           <Stepper size="lg" index={activeStep} colorScheme="yellow">
@@ -57,8 +59,17 @@ const MainApp = () => {
             ))}
           </Stepper>
         </Center>
-        <div>HERE THE STEP</div>
-        <Button onClick={() => setActiveStep(activeStep + 1)}>Click</Button>
+        <div>
+          {activeStep === 0 && <Step1 />}
+          {activeStep === 1 && <Step2 />}
+          {activeStep === 2 && <Step3 />}
+        </div>
+        <Button 
+          onClick={() => setActiveStep(Math.min(activeStep + 1, steps.length - 1))}
+          disabled={activeStep === steps.length -1 }
+        >
+          Click
+        </Button>
       </div>
     );
   }
