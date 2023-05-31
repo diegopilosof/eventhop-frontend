@@ -45,8 +45,8 @@ const Step1 = ({ changeOrder, addStep }) => {
             const obj = {
                 pickup_longitude: place.geometry.location.lng(), 
                 pickup_latitude: place.geometry.location.lat(),
-                dropoff_longitude: null, 
-                dropoff_latitude: null, 
+                dropoff_longitude: -73.986083, 
+                dropoff_latitude: 40.758028, 
                 passenger_count: formState.passengers,
                 Pickup_Year: date.getFullYear(),
                 Pickup_Month: date.getMonth() + 1,
@@ -74,6 +74,7 @@ const Step1 = ({ changeOrder, addStep }) => {
     passengers: '',
     pickupTime: '',
     address: '',
+     date: '',
   });
 
   let searchBox = useRef();
@@ -128,6 +129,10 @@ const Step1 = ({ changeOrder, addStep }) => {
             <FormControl>
               <FormLabel>Passengers</FormLabel>
               <Input type='number' name='passengers' value={formState.passengers} onChange={handleChange} />
+            </FormControl>
+            <FormControl>
+                <FormLabel>Date</FormLabel>
+                <Input type='date' name='date' value={formState.date} onChange={handleChange} />
             </FormControl>
             <FormControl>
               <FormLabel>Pickup time</FormLabel>

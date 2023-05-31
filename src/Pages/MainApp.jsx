@@ -31,6 +31,7 @@ const MainApp = () => {
     passengers: '',
     pickupTime: '',
     address: '',
+    date: '',
   });
   const { activeStep, setActiveStep } = useSteps({
     index: 0,
