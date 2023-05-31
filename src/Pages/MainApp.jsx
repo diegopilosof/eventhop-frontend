@@ -44,7 +44,7 @@ const MainApp = () => {
 
   function changeOrder(value) {
     setOrder(value);
-  };
+  }
 
   async function submitOrder() {
     try {
@@ -95,12 +95,16 @@ const MainApp = () => {
         </Stepper>
       </Center>
       <div>
-        {activeStep === 0 && <Step1 changeOrder={changeOrder} addStep={addStep} />}
-        {activeStep === 1 && <Step2 order={order} submitOrder={submitOrder} />}
-        {activeStep === 2 && <Step3 order={order} />}
+        {activeStep === 0 && (
+          <Step1 changeOrder={changeOrder} addStep={addStep} />
+        )}
+        {activeStep === 1 && (
+          <Step2 order={order} addStep={addStep} submitOrder={submitOrder} />
+        )}
+        {activeStep === 2 && <Step3 order={order} addStep={addStep} />}
       </div>
     </div>
   );
-}
+};
 
 export default MainApp;
