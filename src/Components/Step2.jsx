@@ -1,9 +1,147 @@
-import React from 'react'
+import React, { useState } from "react";
+import {
+  Heading,
+  Box,
+  Divider,
+  Text,
+  Bold,
+  Flex,
+  Image,
+  Button,
+} from "@chakra-ui/react";
+import userdetails from "../Design/userdetails.svg";
+import eventdetails from "../Design/eventdetails.svg";
+import pickup from "../Design/pickup.svg";
+import dropback from "../Design/dropback.svg";
 
-const Step2 = ({ order }) => {
+const Step2 = ({ order, submitOrder }) => {
+  const [error, setError] = useState("");
+
+  async function submit() {
+    const error = await submitOrder();
+    setError(error);
+  }
+
   return (
-    <div>Step2</div>
-  )
-}
+    <Flex justify="center">
+      <Box p={2} w="80%" bg="white" borderRadius="md" boxShadow="md">
+        <Heading fontSize={20} mt={5}>
+          <Flex alignItems="center" justify="center" color="#5F370E">
+            <Image src={userdetails} width="40px" mr={2} />
+            User Details
+          </Flex>
+        </Heading>
+        <Flex
+          flexDirection="row"
+          textAlign="center"
+          justify="center"
+          gap={10}
+          my={8}
+        >
+          <Text>
+            <Text fontWeight="bold">Full name:</Text> {order.firstName}{" "}
+            {order.lastName}
+          </Text>
+          <Text>
+            <Text fontWeight="bold">Email:</Text> {order.email}
+          </Text>
+          <Text>
+            <Text fontWeight="bold">Phone Number:</Text> {order.phone}
+          </Text>
+        </Flex>
+        <Divider />
+        <Heading fontSize={20} mt={5}>
+          <Flex alignItems="center" justify="center" color="#5F370E">
+            <Image src={eventdetails} width="40px" mr={2} />
+            Event Details
+          </Flex>
+        </Heading>
+        <Flex
+          flexDirection="row"
+          textAlign="center"
+          justify="center"
+          gap={10}
+          my={5}
+        >
+          <Text>
+            <Text fontWeight="bold">Event Name:</Text> Noa Kirel Concert
+          </Text>
+          <Text>
+            <Text fontWeight="bold">Address:</Text> Address 23, 2019
+          </Text>
+          <Text>
+            <Text fontWeight="bold">Time:</Text> 23:00
+          </Text>
+          <Text>
+            <Text fontWeight="bold">Price:</Text> 100$
+          </Text>
+        </Flex>
+        <Divider />
+        <Heading fontSize={20} mt={5}>
+          <Flex alignItems="center" justify="center" color="#5F370E">
+            <Image src={pickup} width="40px" mr={2} />
+            Pickup Summary
+          </Flex>
+        </Heading>
+        <Flex
+          flexDirection="row"
+          textAlign="center"
+          justify="center"
+          gap={10}
+          my={5}
+        >
+          <Text>
+            <Text fontWeight="bold">Address:</Text> {order.address}
+          </Text>
+          <Text>
+            <Text fontWeight="bold">Time:</Text> {order.arrivalTime}
+          </Text>
+          <Text>
+            <Text fontWeight="bold">Number of Passengers:</Text>{" "}
+            {order.passengers}
+          </Text>
+          <Text>
+            <Text fontWeight="bold">Price:</Text> 100$
+          </Text>
+        </Flex>
+        <Divider />
+        <Heading fontSize={20} mt={5}>
+          <Flex alignItems="center" justify="center" color="#5F370E">
+            <Image src={dropback} width="40px" mr={2} />
+            Dropback Summary
+          </Flex>
+        </Heading>
+        <Flex
+          flexDirection="row"
+          textAlign="center"
+          justify="center"
+          gap={10}
+          my={5}
+        >
+          <Text>
+            <Text fontWeight="bold">Address:</Text> Address 23, 2019
+          </Text>
+          <Text>
+            <Text fontWeight="bold">Time:</Text> 23:00
+          </Text>
+          <Text>
+            <Text fontWeight="bold"> Passengers:</Text> 2{" "}
+          </Text>
+          <Text>
+            <Text fontWeight="bold">Price:</Text> 100$
+          </Text>
+        </Flex>
+        <Divider />
+        <Heading mt={5} fontSize={20}>
+          Total Price
+        </Heading>
+        <Text>
+          <Text fontWeight="bold">Price:</Text> 100$
+        </Text>
+        <Button onClick={submit}>Submit</Button>
+      </Box>
+    </Flex>
+  );
+};
 
-export default Step2
+export default Step2;

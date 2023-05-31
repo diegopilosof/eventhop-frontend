@@ -72,7 +72,7 @@ const Step1 = ({ changeOrder, addStep }) => {
     email: '',
     phone: '',
     passengers: '',
-    pickupTime: '',
+    arrivalTime: '',
     address: '',
      date: '',
   });
