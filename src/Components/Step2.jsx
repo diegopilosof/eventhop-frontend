@@ -91,7 +91,7 @@ const Step2 = ({ order, submitOrder }) => {
           my={5}
         >
           <Text>
-            <Text fontWeight="bold">Address:</Text> {order.address}
+            <Text fontWeight="bold">Address:</Text> {order.place}
           </Text>
           <Text>
             <Text fontWeight="bold">Time:</Text> {order.arrivalTime}

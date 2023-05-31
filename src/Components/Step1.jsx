@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Box, Input, Button, Select, VStack, FormControl, FormLabel, Flex } from '@chakra-ui/react';
 import { FaMapMarkerAlt } from 'react-icons/fa';
-import axios from 'axios'
 import { server } from '../App';
 
 
@@ -20,12 +19,8 @@ const Step1 = ({ changeOrder, addStep }) => {
             );
             return;
           }
-
           setPlace(place)
-
-          const address = place.formatted_address;
-          const lat = place.geometry.location.lat();
-          const lng = place.geometry.location.lng();
+          console.log(place);
         });
       }
 
@@ -60,9 +55,10 @@ const Step1 = ({ changeOrder, addStep }) => {
         e.preventDefault();
         const splittedDate = formState.date.split("-");
         const hour = formState.arrivalTime.split(':')
+        if(!place) return
         try {
             let date = new Date(Number(splittedDate[0]), Number(splittedDate[1]) - 1, Number(splittedDate[2]));
-        const weekday = date.getDay() === 0 ? 6 : date.getDay() - 1;
+            const weekday = date.getDay() === 0 ? 6 : date.getDay() - 1;
           const obj = {
               pickup_longitude: place.geometry.location.lng(), 
               pickup_latitude: place.geometry.location.lat(),
@@ -83,9 +79,11 @@ const Step1 = ({ changeOrder, addStep }) => {
               ),
               DayHour: `${weekday}_${Number(hour[0])-1}` 
           };
+          console.log(obj);
           const response = await server.post('/order/calc',obj)
           console.log(response.data);
           formState.price = Math.floor(response.data);
+          formState.place = place.formatted_address
           changeOrder(formState);
           addStep();
         } catch (error) {
@@ -100,20 +98,12 @@ const Step1 = ({ changeOrder, addStep }) => {
     email: '',
     phone: '',
     passengers: '',
-    arrivalTime: '',
+    arrivalTime: '00:00',
     address: '',
     date: '',
   });
 
   let searchBox = useRef();
-
-  function onSubmit(e) {
-    e.preventDefault();
-    console.log(formState);
-    
-    changeOrder(formState);
-    addStep();
-  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -129,42 +119,42 @@ const Step1 = ({ changeOrder, addStep }) => {
   return (
     <Flex justify="center">
       <Box p={2} w="80%" bg="white" borderRadius="md" boxShadow="md">
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleRequest}>
           <VStack align="stretch">
           <FormLabel>
                 <Box as={FaMapMarkerAlt} boxSize={4} display="inline-block" mr={2} mb={1} />
                 Address
             </FormLabel>
-            <FormControl>
-                <Input ref={addressRef} type="text"/>
+            <FormControl isRequired>
+                <Input required ref={addressRef} type="text"/>
             </FormControl>
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel>First name</FormLabel>
-              <Input name='firstName' value={formState.firstName} onChange={handleChange} />
+              <Input required name='firstName' value={formState.firstName} onChange={handleChange} />
             </FormControl>
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel>Last name</FormLabel>
-              <Input name='lastName' value={formState.lastName} onChange={handleChange} />
+              <Input required name='lastName' value={formState.lastName} onChange={handleChange} />
             </FormControl>
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel>Email</FormLabel>
-              <Input name='email' value={formState.email} onChange={handleChange} />
+              <Input required name='email' value={formState.email} onChange={handleChange} />
             </FormControl>
             <FormControl>
               <FormLabel>Phone number</FormLabel>
               <Input name='phone' value={formState.phone} onChange={handleChange} />
             </FormControl>
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel>Passengers</FormLabel>
-              <Input type='number' name='passengers' value={formState.passengers} onChange={handleChange} />
+              <Input required type='number' name='passengers' value={formState.passengers} onChange={handleChange} />
             </FormControl>
-            <FormControl>
+            <FormControl isRequired>
                 <FormLabel>Date</FormLabel>
-                <Input type='date' name='date' value={formState.date} onChange={handleChange} />
+                <Input required type='date' name='date' value={formState.date} onChange={handleChange} />
             </FormControl>
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel>Pickup time</FormLabel>
-              <Select name='arrivalTime' value={formState.arrivalTime} onChange={handleChange}>
+              <Select required name='arrivalTime' value={formState.arrivalTime} onChange={handleChange}>
                 {times.map(time => (
                   <option key={time} value={time}>
                     {time}
@@ -173,7 +163,7 @@ const Step1 = ({ changeOrder, addStep }) => {
               </Select>
             </FormControl>
           </VStack>
-          <Button onClick={(e)=>handleRequest(e)} type="submit">Submit</Button>
+          <Button type="submit">Submit</Button>
         </form>
       </Box>
     </Flex>

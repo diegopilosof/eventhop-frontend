@@ -30,7 +30,7 @@ const MainApp = () => {
     email: '',
     phone: '',
     passengers: '',
-    arrivalTime: '',
+    arrivalTime: '00:00',
     address: '',
     date: '',
   });
@@ -71,7 +71,7 @@ const MainApp = () => {
   return (
     <div className="MainApp">
       <Heading>Event Hop</Heading>
-      <Center my={5}>
+      <Center >
         <Stepper size="lg" index={activeStep} colorScheme="yellow">
           {steps.map((step, index) => (
             <Step key={index}>
