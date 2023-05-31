@@ -15,6 +15,13 @@ import pickup from "../Design/pickup.svg";
 import dropback from "../Design/dropback.svg";
 
 const Step2 = ({ order, submitOrder }) => {
+  const [error, setError] = useState("");
+
+  async function submit() {
+    const error = await submitOrder();
+    setError(error);
+  }
+
   return (
     <Flex justify="center">
       <Box p={2} w="80%" bg="white" borderRadius="md" boxShadow="md">
@@ -87,7 +94,7 @@ const Step2 = ({ order, submitOrder }) => {
             <Text fontWeight="bold">Address:</Text> {order.address}
           </Text>
           <Text>
-            <Text fontWeight="bold">Time:</Text> {order.pickupTime}
+            <Text fontWeight="bold">Time:</Text> {order.arrivalTime}
           </Text>
           <Text>
             <Text fontWeight="bold">Number of Passengers:</Text>{" "}
@@ -131,7 +138,7 @@ const Step2 = ({ order, submitOrder }) => {
         <Text>
           <Text fontWeight="bold">Price:</Text> 100$
         </Text>
-        <Button onClick={submitOrder}>Submit</Button>
+        <Button onClick={submit}>Submit</Button>
       </Box>
     </Flex>
   );

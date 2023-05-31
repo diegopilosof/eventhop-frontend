@@ -16,6 +16,7 @@ import {
 import Step1 from "../Components/Step1";
 import Step2 from "../Components/Step2";
 import Step3 from "../Components/Step3";
+import { server } from "../App";
 
 const MainApp = () => {
   const steps = [
@@ -29,7 +30,7 @@ const MainApp = () => {
     email: '',
     phone: '',
     passengers: '',
-    pickupTime: '',
+    arrivalTime: '',
     address: '',
   });
   const { activeStep, setActiveStep } = useSteps({
@@ -45,8 +46,25 @@ const MainApp = () => {
     setOrder(value);
   };
 
-  function submitOrder() {
-    alert("not implemented yet...")
+  async function submitOrder() {
+    try {
+      const inputDate = order.arrivalTime.split(":");
+      const newDate = new Date();
+      newDate.setHours(inputDate[0]);
+      newDate.setMinutes(inputDate[1]);
+
+      const serverOrder = {...order};
+      serverOrder.arrivalTime = newDate;
+
+      const response = await server.post("/order", serverOrder);
+      console.log(response.data);
+      setOrder(response.data);
+      addStep();
+      return {error: ""}
+    } catch (error) {
+      console.log(error.message);
+      return {error: error.message}
+    }
   }
 
   return (

@@ -43,7 +43,7 @@ const Step1 = ({ changeOrder, addStep }) => {
     email: '',
     phone: '',
     passengers: '',
-    pickupTime: '',
+    arrivalTime: '',
     address: '',
   });
 
@@ -101,8 +101,8 @@ const Step1 = ({ changeOrder, addStep }) => {
               <Input type='number' name='passengers' value={formState.passengers} onChange={handleChange} />
             </FormControl>
             <FormControl>
-              <FormLabel>Pickup time</FormLabel>
-              <Select name='pickupTime' value={formState.pickupTime} onChange={handleChange}>
+              <FormLabel>Arrival Time</FormLabel>
+              <Select name='arrivalTime' value={formState.arrivalTime} onChange={handleChange}>
                 {times.map(time => (
                   <option key={time} value={time}>
                     {time}
