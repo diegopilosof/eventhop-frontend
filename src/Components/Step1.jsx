@@ -36,35 +36,61 @@ const Step1 = ({ changeOrder, addStep }) => {
             initAutocomplete()
         }
       }, [])
+
+      function getHaversineDistance(lat1, lon1, lat2, lon2) {
+        function toRad(x) {
+          return x * Math.PI / 180;
+        }
+      
+        var R = 6371;
+        var dLat = toRad(lat2 - lat1);
+        var dLon = toRad(lon2 - lon1);
+        var lat1 = toRad(lat1);
+        var lat2 = toRad(lat2);
+      
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2); 
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
+        var d = R * c;
+        
+        return d;
+      }
+      
       
 
       const handleRequest = async (e) =>{
         e.preventDefault();
+        const splittedDate = formState.date.split("-");
+        const hour = formState.arrivalTime.split(':')
         try {
-            let date = new Date(); 
-            const obj = {
-                pickup_longitude: place.geometry.location.lng(), 
-                pickup_latitude: place.geometry.location.lat(),
-                dropoff_longitude: -73.986083, 
-                dropoff_latitude: 40.758028, 
-                passenger_count: formState.passengers,
-                Pickup_Year: date.getFullYear(),
-                Pickup_Month: date.getMonth() + 1,
-                Pickup_Day: date.getDate(),
-                Pickup_Hour: date.getHours(),
-                Pickup_Minute: date.getMinutes(),
-                Pickup_DayOfWeek: date.getDay(), 
-                Euclidean_Distance: null, 
-                DayHour: `${date.getDay()}_${date.getHours()}` 
-            };
-            // const response = await axios.post('http://localhost:8080/calc',)
-            
+            let date = new Date(Number(splittedDate[0]), Number(splittedDate[1]) - 1, Number(splittedDate[2]));
+        const weekday = date.getDay() === 0 ? 6 : date.getDay() - 1;
+          const obj = {
+              pickup_longitude: place.geometry.location.lng(), 
+              pickup_latitude: place.geometry.location.lat(),
+              dropoff_longitude: -73.986083, 
+              dropoff_latitude: 40.758028, 
+              passenger_count: Number(formState.passengers),
+              Pickup_Year: Number(splittedDate[0]),
+              Pickup_Month: Number(splittedDate[1]),
+              Pickup_Day: Number(splittedDate[2]),
+              Pickup_Hour: Number(hour[0])-1,
+              Pickup_Minute: Number(hour[1]),
+              Pickup_DayOfWeek: weekday, 
+              Euclidean_Distance: getHaversineDistance(
+                place.geometry.location.lat(),
+                place.geometry.location.lng(),
+                40.758028,
+                -73.986083,
+              ),
+              DayHour: `${weekday}_${Number(hour[0])-1}` 
+          };
+          const response = await axios.post('http://localhost:8080/calc',obj)
         } catch (error) {
-            
+          console.log(error);
         }
-
-        
       }
+      
 
   const [formState, setFormState] = useState({
     firstName: '',
@@ -74,7 +100,7 @@ const Step1 = ({ changeOrder, addStep }) => {
     passengers: '',
     arrivalTime: '',
     address: '',
-     date: '',
+    date: '',
   });
 
   let searchBox = useRef();
@@ -136,7 +162,7 @@ const Step1 = ({ changeOrder, addStep }) => {
             </FormControl>
             <FormControl>
               <FormLabel>Pickup time</FormLabel>
-              <Select name='pickupTime' value={formState.pickupTime} onChange={handleChange}>
+              <Select name='arrivalTime' value={formState.arrivalTime} onChange={handleChange}>
                 {times.map(time => (
                   <option key={time} value={time}>
                     {time}
