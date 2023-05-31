@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Box, Input, Button, Select, VStack, FormControl, FormLabel, Flex } from '@chakra-ui/react';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import axios from 'axios'
+import { server } from '../App';
 
 
 const Step1 = ({ changeOrder, addStep }) => {
@@ -21,13 +22,10 @@ const Step1 = ({ changeOrder, addStep }) => {
           }
 
           setPlace(place)
-          console.log(place);
 
           const address = place.formatted_address;
           const lat = place.geometry.location.lat();
           const lng = place.geometry.location.lng();
-
-          console.log(address, lat, lng);
         });
       }
 
@@ -85,7 +83,11 @@ const Step1 = ({ changeOrder, addStep }) => {
               ),
               DayHour: `${weekday}_${Number(hour[0])-1}` 
           };
-          const response = await axios.post('http://localhost:8080/calc',obj)
+          const response = await server.post('/order/calc',obj)
+          console.log(response.data);
+          formState.price = Math.floor(response.data);
+          changeOrder(formState);
+          addStep();
         } catch (error) {
           console.log(error);
         }
@@ -133,9 +135,9 @@ const Step1 = ({ changeOrder, addStep }) => {
                 <Box as={FaMapMarkerAlt} boxSize={4} display="inline-block" mr={2} mb={1} />
                 Address
             </FormLabel>
-            <div>
+            <FormControl>
                 <Input ref={addressRef} type="text"/>
-            </div>
+            </FormControl>
             <FormControl>
               <FormLabel>First name</FormLabel>
               <Input name='firstName' value={formState.firstName} onChange={handleChange} />

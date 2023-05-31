@@ -64,16 +64,16 @@ const Step2 = ({ order, submitOrder }) => {
           my={5}
         >
           <Text>
-            <Text fontWeight="bold">Event Name:</Text> Noa Kirel Concert
+            <Text fontWeight="bold">Event Name:</Text> The Lion King
           </Text>
           <Text>
-            <Text fontWeight="bold">Address:</Text> Address 23, 2019
+            <Text fontWeight="bold">Address:</Text> Minskoff Theatre in New York
           </Text>
           <Text>
             <Text fontWeight="bold">Time:</Text> 23:00
           </Text>
           <Text>
-            <Text fontWeight="bold">Price:</Text> 100$
+            <Text fontWeight="bold">Price:</Text> {order.price}
           </Text>
         </Flex>
         <Divider />
