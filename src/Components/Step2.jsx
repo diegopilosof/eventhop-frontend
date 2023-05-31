@@ -14,7 +14,7 @@ import eventdetails from "../Design/eventdetails.svg";
 import pickup from "../Design/pickup.svg";
 import dropback from "../Design/dropback.svg";
 
-const Step2 = ({ order, submitOrder }) => {
+const Step2 = ({ order, submitOrder, addStep }) => {
   return (
     <Flex justify="center">
       <Box p={2} w="80%" bg="white" borderRadius="md" boxShadow="md">
@@ -131,7 +131,14 @@ const Step2 = ({ order, submitOrder }) => {
         <Text>
           <Text fontWeight="bold">Price:</Text> 100$
         </Text>
-        <Button onClick={submitOrder}>Submit</Button>
+        <Button
+          onClick={() => {
+            addStep();
+            submitOrder();
+          }}
+        >
+          Submit
+        </Button>
       </Box>
     </Flex>
   );
