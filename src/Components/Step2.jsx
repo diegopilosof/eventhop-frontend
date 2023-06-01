@@ -24,7 +24,7 @@ const Step2 = ({ order, submitOrder, urlParams }) => {
 
   return (
     <Flex justify="center">
-      <Box p={2} w="80%" bg="white" borderRadius="md" boxShadow="md">
+      <Box p={2} w="80%" bg="white" borderRadius="md" boxShadow="md" mb={5}>
         <Heading fontSize={20} mt={5}>
           <Flex alignItems="center" justify="center" color="#5F370E">
             <Image src={userdetails} width="40px" mr={2} />
@@ -123,8 +123,10 @@ const Step2 = ({ order, submitOrder, urlParams }) => {
                 <Text fontWeight="bold">Address:</Text> {order.place}
               </Text>
               <Text>
-                <Text fontWeight="bold">Time:</Text> {`${+order.arrivalTime.split(":")[0] + 2}:${order.arrivalTime.split(":")[1]}`}
-              
+                <Text fontWeight="bold">Time:</Text>{" "}
+                {`${+order.arrivalTime.split(":")[0] + 2}:${
+                  order.arrivalTime.split(":")[1]
+                }`}
               </Text>
               <Text>
                 <Text fontWeight="bold"> Passengers:</Text> {order.passengers}
