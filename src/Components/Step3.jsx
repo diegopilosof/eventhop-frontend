@@ -2,10 +2,9 @@ import React from "react";
 import { Heading, Box, Text, Flex, Image, Button } from "@chakra-ui/react";
 import confirmation from "../Design/confirmation.svg";
 
-const Step3 = ({ order }) => {
+const Step3 = ({ order , params}) => {
   const handleCloseWindow = () => {
-    const newWindow = window.open("", "_self");
-    newWindow.close();
+    window.location.href = `${params.returnurl}`;
   };
 
   return (

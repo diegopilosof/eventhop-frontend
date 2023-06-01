@@ -14,7 +14,7 @@ import eventdetails from "../Design/eventdetails.svg";
 import pickup from "../Design/pickup.svg";
 import dropback from "../Design/dropback.svg";
 
-const Step2 = ({ order, submitOrder, event }) => {
+const Step2 = ({ order, submitOrder, event, params }) => {
   const [error, setError] = useState("");
 
   async function submit() {
