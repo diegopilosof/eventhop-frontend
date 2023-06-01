@@ -14,7 +14,7 @@ import eventdetails from "../Design/eventdetails.svg";
 import pickup from "../Design/pickup.svg";
 import dropback from "../Design/dropback.svg";
 
-const Step2 = ({ order, submitOrder, urlParams }) => {
+const Step2 = ({ order, submitOrder, event }) => {
   const [error, setError] = useState("");
 
   async function submit() {
@@ -63,16 +63,13 @@ const Step2 = ({ order, submitOrder, urlParams }) => {
           my={5}
         >
           <Text>
-            <Text fontWeight="bold">Event Name:</Text> The Lion King
+            <Text fontWeight="bold">Event Name:</Text> {event.name}
           </Text>
           <Text>
-            <Text fontWeight="bold">Address:</Text> Minskoff Theatre New York
+            <Text fontWeight="bold">Address:</Text> {event.address}
           </Text>
           <Text>
-            <Text fontWeight="bold">Time:</Text> 23:00
-          </Text>
-          <Text>
-            <Text fontWeight="bold">Price:</Text> $100
+            <Text fontWeight="bold">Time:</Text> {event.time}
           </Text>
         </Flex>
         <Divider />
@@ -137,10 +134,10 @@ const Step2 = ({ order, submitOrder, urlParams }) => {
           </>
         ) : null}
         <Heading mt={5} fontSize={20}>
-          Total Price
+          Total Ride Price
         </Heading>
         <Text>
-          <Text fontWeight="bold">Price:</Text> 100$
+          <Text fontWeight="bold">Price:</Text> ${order.price + order.rideBackPrice}
         </Text>
         <Button onClick={submit} colorScheme="yellow" mt={4}>
           Submit
