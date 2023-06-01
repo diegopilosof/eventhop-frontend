@@ -23,6 +23,12 @@ import taxi from "../Design/taxi.jpg";
 import logo from "../Design/logo.jpg";
 
 const MainApp = () => {
+  const event = {
+    name: "The Lion King",
+    address: "Minskoff Theatre in New York",
+    time: "20:00",
+    price: 100
+  };
   const steps = [
     { title: "Fill", description: "Fill in the form" },
     { title: "Calculate", description: "Calculate the price" },
@@ -34,7 +40,7 @@ const MainApp = () => {
     email: '',
     phone: '',
     passengers: '',
-    arrivalTime: '00:00',
+    arrivalTime: '20:00',
     address: '',
     date: '',
   });
@@ -128,7 +134,7 @@ const MainApp = () => {
           <Step1 changeOrder={changeOrder} addStep={addStep} />
         )}
         {activeStep === 1 && (
-          <Step2 order={order} addStep={addStep} submitOrder={submitOrder} />
+          <Step2 order={order} addStep={addStep} submitOrder={submitOrder} event={event} />
         )}
         {activeStep === 2 && <Step3 order={order} addStep={addStep} />}
       </div>
