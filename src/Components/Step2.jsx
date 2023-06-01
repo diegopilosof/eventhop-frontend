@@ -23,7 +23,7 @@ const Step2 = ({ order, submitOrder, event }) => {
     if (!error) {
       toast({
         title: "Your booking is confirmed!",
-        description: { error },
+        description: " Thank you for booking your ride with us.",
         status: "success",
         duration: 4000,
         isClosable: true,
@@ -31,7 +31,7 @@ const Step2 = ({ order, submitOrder, event }) => {
     } else {
       toast({
         title: "Uups, something went wrong!",
-        description: { error },
+        description: error.message,
         status: "error",
         duration: 4000,
         isClosable: true,
