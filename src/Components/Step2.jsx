@@ -13,13 +13,30 @@ import userdetails from "../Design/userdetails.svg";
 import eventdetails from "../Design/eventdetails.svg";
 import pickup from "../Design/pickup.svg";
 import dropback from "../Design/dropback.svg";
+import { useToast } from "@chakra-ui/react";
 
 const Step2 = ({ order, submitOrder, event }) => {
-  const [error, setError] = useState("");
+  const toast = useToast();
 
   async function submit() {
     const error = await submitOrder();
-    setError(error);
+    if (!error) {
+      toast({
+        title: "Your booking is confirmed!",
+        description: { error },
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Uups, something went wrong!",
+        description: { error },
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+    }
   }
 
   return (
@@ -139,7 +156,8 @@ const Step2 = ({ order, submitOrder, event }) => {
           Total Ride Price
         </Heading>
         <Text>
-          <Text fontWeight="bold">Price:</Text> ${order.price + order.rideBackPrice}
+          <Text fontWeight="bold">Price:</Text> $
+          {order.price + order.rideBackPrice}
         </Text>
         <Button onClick={submit} colorScheme="yellow" mt={4}>
           Submit

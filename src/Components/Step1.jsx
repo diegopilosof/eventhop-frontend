@@ -9,13 +9,19 @@ import {
   FormLabel,
   Flex,
   Checkbox,
+  Toast,
+  ToastBody,
+  ToastHeader,
 } from "@chakra-ui/react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { server } from "../App";
+import { useToast } from "@chakra-ui/react";
 
 const Step1 = ({ changeOrder, addStep }) => {
   const [place, setPlace] = useState(false);
   const addressRef = useRef(null);
+  const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   function initAutocomplete() {
     const autocomplete = new window.google.maps.places.Autocomplete(
@@ -63,6 +69,7 @@ const Step1 = ({ changeOrder, addStep }) => {
     e.preventDefault();
     const splittedDate = formState.date.split("-");
     const hour = formState.arrivalTime.split(":");
+    setIsLoading(true);
     try {
       let date = new Date(
         Number(splittedDate[0]),
@@ -100,8 +107,23 @@ const Step1 = ({ changeOrder, addStep }) => {
       formState.address = place.formatted_address;
       changeOrder(formState);
       addStep();
+      toast({
+        title: "Your order has been calculated!",
+        description: "We have calculated the price of your order.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Ups! Something went wrong.",
+        description: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      setIsLoading(false);
     }
   };
 
@@ -234,7 +256,12 @@ const Step1 = ({ changeOrder, addStep }) => {
               </Checkbox>
             </FormControl>
           </VStack>
-          <Button type="submit" colorScheme="yellow" mt={4}>
+          <Button
+            type="submit"
+            colorScheme="yellow"
+            mt={4}
+            isLoading={isLoading}
+          >
             Submit
           </Button>
         </form>
