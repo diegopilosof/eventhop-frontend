@@ -37,8 +37,8 @@ const arrivalDate = new Date();
 arrivalDate.setHours(hours);
 arrivalDate.setMinutes(minutes);
 
-const resultDate = new Date(arrivalDate.getTime() + estimatedMinutes * 60000);
-const result = resultDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+const resultDate = new Date(arrivalDate.getTime() - estimatedMinutes * 60000);
+const result = resultDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
 
 
 
@@ -167,14 +167,14 @@ const result = resultDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-d
         justify="center"
         gap={250}>
           <Text>
-          <Text fontWeight="bold">Price:</Text> ${order.price + order.rideBackPrice}
+          <Text fontWeight="bold">Price:</Text> ${order.rideBackPrice ? order.price + order.rideBackPrice : order.price}
           </Text>
           <Text>
             <Text fontWeight="bold">Be ready at:</Text> {result}
           </Text>
         </Flex>
         <Button onClick={submit} colorScheme="yellow" mt={4}>
-          Submit
+          Book now!
         </Button>
       </Box>
     </Flex>
