@@ -96,10 +96,10 @@ const params = extractUrlParams();
       const response = await server.post("/order", serverOrder);
       setOrder(response.data);
       addStep();
-      return { error: "" };
+      return "";
     } catch (error) {
       console.log(error.message);
-      return { error: error.message };
+      return error.message;
     }
   }
 

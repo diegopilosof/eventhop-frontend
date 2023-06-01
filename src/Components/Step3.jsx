@@ -12,7 +12,7 @@ const Step3 = ({ order , params}) => {
   };
 
   return (
-    <div>
+    <div className="step3">
       <Flex justify="center">
         <Box p={2} w="80%" bg="white" borderRadius="md" boxShadow="md" mb={5}>
           <Flex

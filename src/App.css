@@ -4,12 +4,6 @@
   justify-content: center;
 }
 
-html,
-#root,
-.App {
-  height: 130%;
-}
-
 #root {
   background-image: url("./Design/icon.svg");
 }

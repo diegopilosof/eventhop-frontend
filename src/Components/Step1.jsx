@@ -112,7 +112,7 @@ const Step1 = ({ changeOrder, addStep }) => {
         title: "Your order has been calculated!",
         description: "We have calculated the price of your order.",
         status: "success",
-        duration: 5000,
+        duration: 3000,
         isClosable: true,
       });
     } catch (error) {
@@ -121,7 +121,7 @@ const Step1 = ({ changeOrder, addStep }) => {
         title: "Ups! Something went wrong.",
         description: error.message,
         status: "error",
-        duration: 3000,
+        duration: 2500,
         isClosable: true,
       });
       setIsLoading(false);
