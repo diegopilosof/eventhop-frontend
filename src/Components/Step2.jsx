@@ -15,7 +15,7 @@ import pickup from "../Design/pickup.svg";
 import dropback from "../Design/dropback.svg";
 import { useToast } from "@chakra-ui/react";
 
-const Step2 = ({ order, submitOrder, event }) => {
+const Step2 = ({ order, submitOrder, event, params }) => {
   const toast = useToast();
 
   async function submit() {

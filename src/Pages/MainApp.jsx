@@ -49,6 +49,29 @@ const MainApp = () => {
     count: steps.length,
   });
 
+  function extractUrlParams() {
+    let searchParams = new URLSearchParams(window.location.search);
+    let params = {};
+
+    for (let param of searchParams) {
+        let key = param[0];
+        let value = param[1];
+
+        if (key === 'grandTotal' && value.includes('returnurl')) {
+            let [grandTotal, returnUrl] = value.split('returnurl=');
+
+            params['grandTotal'] = grandTotal;
+            params['returnurl'] = decodeURIComponent(returnUrl);
+        } else {
+            params[key] = value;
+        }
+    }
+    return params;
+}
+
+const params = extractUrlParams();
+
+
   function addStep() {
     setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
   }
@@ -134,9 +157,9 @@ const MainApp = () => {
           <Step1 changeOrder={changeOrder} addStep={addStep}  />
         )}
         {activeStep === 1 && (
-          <Step2 order={order} addStep={addStep} submitOrder={submitOrder} event={event} />
+          <Step2 order={order} addStep={addStep} submitOrder={submitOrder} event={event} params={params} />
         )}
-        {activeStep === 2 && <Step3 order={order} addStep={addStep} />}
+        {activeStep === 2 && <Step3 order={order} addStep={addStep} params={params}/>}
       </div>
     </div>
   );
