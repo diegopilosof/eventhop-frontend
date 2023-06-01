@@ -88,14 +88,15 @@ const Step1 = ({ changeOrder, addStep }) => {
               ),
               DayHour: `${weekday}_${Number(hour[0])}` 
           };
-          console.log(formState);
           const response = await server.post('/order/calc',obj)
+          console.log(response.data);
           if(formState.rideBack) {
-            formState.rideBackPrice = Math.floor(response.data*1.2)
+            formState.rideBackPrice = Math.floor(response.data.response*1.2)
           }
-          formState.price = Math.floor(response.data*1.1);
+          formState.price = Math.floor(response.data.response*1.1);
           formState.place = place.formatted_address
           formState.address = place.formatted_address
+          formState.estimatedTime = Math.floor(response.data.timeDuration+10)
           changeOrder(formState);
           addStep();
         } catch (error) {

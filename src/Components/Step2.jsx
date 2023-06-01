@@ -22,6 +22,28 @@ const Step2 = ({ order, submitOrder, urlParams }) => {
     setError(error);
   }
 
+
+  const arrivalTime = order.arrivalTime;
+let estimatedTime = order.estimatedTime;
+
+if (typeof estimatedTime !== 'string') {
+  estimatedTime = String(estimatedTime);
+}
+
+const [hours, minutes] = arrivalTime.split(':').map(Number);
+const [estimatedMinutes] = estimatedTime.match(/\d+/g).map(Number);
+
+const arrivalDate = new Date();
+arrivalDate.setHours(hours);
+arrivalDate.setMinutes(minutes);
+
+const resultDate = new Date(arrivalDate.getTime() + estimatedMinutes * 60000);
+const result = resultDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+
+
+
+
   return (
     <Flex justify="center">
       <Box p={2} w="80%" bg="white" borderRadius="md" boxShadow="md">
@@ -137,11 +159,21 @@ const Step2 = ({ order, submitOrder, urlParams }) => {
           </>
         ) : null}
         <Heading mt={5} fontSize={20}>
-          Total Price
+          Summary
         </Heading>
-        <Text>
-          <Text fontWeight="bold">Price:</Text> 100$
-        </Text>
+        <Flex
+        marginTop={5}
+        flexDirection="row"
+        textAlign="center"
+        justify="center"
+        gap={250}>
+          <Text>
+            <Text fontWeight="bold">Price:</Text> 100$
+          </Text>
+          <Text>
+            <Text fontWeight="bold">Be ready at:</Text> {result}
+          </Text>
+        </Flex>
         <Button onClick={submit} colorScheme="yellow" mt={4}>
           Submit
         </Button>
