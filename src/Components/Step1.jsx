@@ -59,51 +59,48 @@ const Step1 = ({ changeOrder, addStep }) => {
     return d;
   }
 
-  const handleRequest = async (e) => {
-    e.preventDefault();
-    const splittedDate = formState.date.split("-");
-    const hour = formState.arrivalTime.split(":");
-    try {
-      let date = new Date(
-        Number(splittedDate[0]),
-        Number(splittedDate[1]) - 1,
-        Number(splittedDate[2])
-      );
-      const weekday = date.getDay() === 0 ? 6 : date.getDay() - 1;
-      const obj = {
-        pickup_longitude: place.geometry.location.lng(),
-        pickup_latitude: place.geometry.location.lat(),
-        dropoff_longitude: -73.986083,
-        dropoff_latitude: 40.758028,
-        passenger_count: Number(formState.passengers),
-        Pickup_Year: Number(splittedDate[0]),
-        Pickup_Month: Number(splittedDate[1]),
-        Pickup_Day: Number(splittedDate[2]),
-        Pickup_Hour: Number(hour[0]),
-        Pickup_Minute: Number(hour[1]),
-        Pickup_DayOfWeek: weekday,
-        Euclidean_Distance: getHaversineDistance(
-          place.geometry.location.lat(),
-          place.geometry.location.lng(),
-          40.758028,
-          -73.986083
-        ),
-        DayHour: `${weekday}_${Number(hour[0])}`,
-      };
-      console.log(formState);
-      const response = await server.post("/order/calc", obj);
-      if (formState.rideBack) {
-        formState.rideBackPrice = Math.floor(response.data * 1.2);
+      const handleRequest = async (e) =>{
+        e.preventDefault();
+        const splittedDate = formState.date.split("-");
+        const hour = formState.arrivalTime.split(':')
+        try {
+            let date = new Date(Number(splittedDate[0]), Number(splittedDate[1]) - 1, Number(splittedDate[2]));
+        const weekday = date.getDay() === 0 ? 6 : date.getDay() - 1;
+          const obj = {
+              pickup_longitude: place.geometry.location.lng(), 
+              pickup_latitude: place.geometry.location.lat(),
+              dropoff_longitude: -73.986083, 
+              dropoff_latitude: 40.758028, 
+              passenger_count: Number(formState.passengers),
+              Pickup_Year: Number(splittedDate[0]),
+              Pickup_Month: Number(splittedDate[1]),
+              Pickup_Day: Number(splittedDate[2]),
+              Pickup_Hour: Number(hour[0]),
+              Pickup_Minute: Number(hour[1]),
+              Pickup_DayOfWeek: weekday, 
+              Euclidean_Distance: getHaversineDistance(
+                place.geometry.location.lat(),
+                place.geometry.location.lng(),
+                40.758028,
+                -73.986083,
+              ),
+              DayHour: `${weekday}_${Number(hour[0])}` 
+          };
+          const response = await server.post('/order/calc',obj)
+          console.log(response.data);
+          if(formState.rideBack) {
+            formState.rideBackPrice = Math.floor(response.data.response*1.2)
+          }
+          formState.price = Math.floor(response.data.response*1.1);
+          formState.place = place.formatted_address
+          formState.address = place.formatted_address
+          formState.estimatedTime = Math.floor(response.data.timeDuration+10)
+          changeOrder(formState);
+          addStep();
+        } catch (error) {
+          console.log(error);
+        }
       }
-      formState.price = Math.floor(response.data * 1.1);
-      formState.place = place.formatted_address;
-      formState.address = place.formatted_address;
-      changeOrder(formState);
-      addStep();
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const [formState, setFormState] = useState({
     firstName: "",
