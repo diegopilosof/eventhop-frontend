@@ -4,7 +4,11 @@ import confirmation from "../Design/confirmation.svg";
 
 const Step3 = ({ order , params}) => {
   const handleCloseWindow = () => {
-    window.location.href = `${params.returnurl}`;
+    if(params) {
+      window.location.href = `${params.returnurl}`;
+    }
+    const newWindow = window.open("", "_self")
+    newWindow.close();
   };
 
   return (
