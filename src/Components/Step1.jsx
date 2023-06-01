@@ -8,6 +8,7 @@ import {
   FormControl,
   FormLabel,
   Flex,
+  Checkbox,
 } from "@chakra-ui/react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { server } from "../App";
@@ -76,7 +77,7 @@ const Step1 = ({ changeOrder, addStep }) => {
               Pickup_Year: Number(splittedDate[0]),
               Pickup_Month: Number(splittedDate[1]),
               Pickup_Day: Number(splittedDate[2]),
-              Pickup_Hour: Number(hour[0])-1,
+              Pickup_Hour: Number(hour[0]),
               Pickup_Minute: Number(hour[1]),
               Pickup_DayOfWeek: weekday, 
               Euclidean_Distance: getHaversineDistance(
@@ -85,10 +86,14 @@ const Step1 = ({ changeOrder, addStep }) => {
                 40.758028,
                 -73.986083,
               ),
-              DayHour: `${weekday}_${Number(hour[0])-1}` 
+              DayHour: `${weekday}_${Number(hour[0])}` 
           };
+          console.log(formState);
           const response = await server.post('/order/calc',obj)
-          formState.price = Math.floor(response.data);
+          if(formState.rideBack) {
+            formState.rideBackPrice = Math.floor(response.data*1.2)
+          }
+          formState.price = Math.floor(response.data*1.1);
           formState.place = place.formatted_address
           formState.address = place.formatted_address
           changeOrder(formState);
@@ -108,6 +113,7 @@ const Step1 = ({ changeOrder, addStep }) => {
     arrivalTime: '00:00',
     address: '',
     date: '',
+    rideBack: false,
   });
 
   let searchBox = useRef();
@@ -115,6 +121,10 @@ const Step1 = ({ changeOrder, addStep }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormState((prevState) => ({ ...prevState, [name]: value }));
+    if (name === "rideBack") {
+        const { name, checked } = e.target;
+        setFormState((prevState) => ({ ...prevState, [name]: checked }));
+    }
   };
 
   const times = Array.from({ length: 48 }, (_, i) => {
@@ -186,9 +196,9 @@ const Step1 = ({ changeOrder, addStep }) => {
                 <option value={4}>4</option>
               </Select>
             </FormControl>
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel>Date</FormLabel>
-              <Input
+              <Input required
                 type="date"
                 name="date"
                 value={formState.date}
@@ -197,7 +207,7 @@ const Step1 = ({ changeOrder, addStep }) => {
               />
             </FormControl>
             <FormControl isRequired>
-              <FormLabel>Pickup time</FormLabel>
+              <FormLabel>Arrival time</FormLabel>
               <Select
                 name="arrivalTime"
                 value={formState.arrivalTime}
@@ -210,6 +220,16 @@ const Step1 = ({ changeOrder, addStep }) => {
                   </option>
                 ))}
               </Select>
+            </FormControl>
+            <FormControl>
+              <FormLabel>Want a ride back?</FormLabel>
+              <Checkbox
+                name="rideBack"
+                isChecked={formState.rideBack}
+                onChange={handleChange}
+              >
+                Yes, I want a ride back
+              </Checkbox>
             </FormControl>
           </VStack>
           <Button type="submit">Submit</Button>

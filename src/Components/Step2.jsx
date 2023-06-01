@@ -14,7 +14,7 @@ import eventdetails from "../Design/eventdetails.svg";
 import pickup from "../Design/pickup.svg";
 import dropback from "../Design/dropback.svg";
 
-const Step2 = ({ order, submitOrder }) => {
+const Step2 = ({ order, submitOrder, urlParams }) => {
   const [error, setError] = useState("");
 
   async function submit() {
@@ -66,13 +66,13 @@ const Step2 = ({ order, submitOrder }) => {
             <Text fontWeight="bold">Event Name:</Text> The Lion King
           </Text>
           <Text>
-            <Text fontWeight="bold">Address:</Text> Minskoff Theatre in New York
+            <Text fontWeight="bold">Address:</Text> Minskoff Theatre New York
           </Text>
           <Text>
             <Text fontWeight="bold">Time:</Text> 23:00
           </Text>
           <Text>
-            <Text fontWeight="bold">Price:</Text> {order.price}
+            <Text fontWeight="bold">Price:</Text> $100
           </Text>
         </Flex>
         <Divider />
@@ -100,37 +100,42 @@ const Step2 = ({ order, submitOrder }) => {
             {order.passengers}
           </Text>
           <Text>
-            <Text fontWeight="bold">Price:</Text> 100$
+            <Text fontWeight="bold">Price:</Text> ${order.price}
           </Text>
         </Flex>
-        <Divider />
-        <Heading fontSize={20} mt={5}>
-          <Flex alignItems="center" justify="center" color="#5F370E">
-            <Image src={dropback} width="40px" mr={2} />
-            Dropback Summary
-          </Flex>
-        </Heading>
-        <Flex
-          flexDirection="row"
-          textAlign="center"
-          justify="center"
-          gap={10}
-          my={5}
-        >
-          <Text>
-            <Text fontWeight="bold">Address:</Text> Address 23, 2019
-          </Text>
-          <Text>
-            <Text fontWeight="bold">Time:</Text> 23:00
-          </Text>
-          <Text>
-            <Text fontWeight="bold"> Passengers:</Text> 2{" "}
-          </Text>
-          <Text>
-            <Text fontWeight="bold">Price:</Text> 100$
-          </Text>
-        </Flex>
-        <Divider />
+        {order.rideBack ? (
+          <>
+            <Divider />
+            <Heading fontSize={20} mt={5}>
+              <Flex alignItems="center" justify="center" color="#5F370E">
+                <Image src={dropback} width="40px" mr={2} />
+                Dropback Summary
+              </Flex>
+            </Heading>
+            <Flex
+              flexDirection="row"
+              textAlign="center"
+              justify="center"
+              gap={10}
+              my={5}
+            >
+              <Text>
+                <Text fontWeight="bold">Address:</Text> {order.place}
+              </Text>
+              <Text>
+                <Text fontWeight="bold">Time:</Text> {`${+order.arrivalTime.split(":")[0] + 2}:${order.arrivalTime.split(":")[1]}`}
+              
+              </Text>
+              <Text>
+                <Text fontWeight="bold"> Passengers:</Text> {order.passengers}
+              </Text>
+              <Text>
+                <Text fontWeight="bold">Price:</Text> ${order.rideBackPrice}
+              </Text>
+            </Flex>
+            <Divider />
+          </>
+        ) : null}
         <Heading mt={5} fontSize={20}>
           Total Price
         </Heading>

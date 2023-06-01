@@ -37,6 +37,7 @@ const MainApp = () => {
     arrivalTime: '00:00',
     address: '',
     date: '',
+    rideBack: false,
   });
   const { activeStep, setActiveStep } = useSteps({
     index: 0,
@@ -125,10 +126,10 @@ const MainApp = () => {
       </Center>
       <div>
         {activeStep === 0 && (
-          <Step1 changeOrder={changeOrder} addStep={addStep} />
+          <Step1 changeOrder={changeOrder} addStep={addStep}  />
         )}
         {activeStep === 1 && (
-          <Step2 order={order} addStep={addStep} submitOrder={submitOrder} />
+          <Step2 order={order} addStep={addStep} submitOrder={submitOrder}  />
         )}
         {activeStep === 2 && <Step3 order={order} addStep={addStep} />}
       </div>
