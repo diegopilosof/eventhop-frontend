@@ -13,36 +13,52 @@ import userdetails from "../Design/userdetails.svg";
 import eventdetails from "../Design/eventdetails.svg";
 import pickup from "../Design/pickup.svg";
 import dropback from "../Design/dropback.svg";
+import { useToast } from "@chakra-ui/react";
 
 const Step2 = ({ order, submitOrder, event }) => {
-  const [error, setError] = useState("");
+  const toast = useToast();
 
   async function submit() {
     const error = await submitOrder();
-    setError(error);
+    if (!error) {
+      toast({
+        title: "Your booking is confirmed!",
+        description: { error },
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
+    } else {
+      toast({
+        title: "Uups, something went wrong!",
+        description: { error },
+        status: "error",
+        duration: 4000,
+        isClosable: true,
+      });
+    }
   }
 
-
   const arrivalTime = order.arrivalTime;
-let estimatedTime = order.estimatedTime;
+  let estimatedTime = order.estimatedTime;
 
-if (typeof estimatedTime !== 'string') {
-  estimatedTime = String(estimatedTime);
-}
+  if (typeof estimatedTime !== "string") {
+    estimatedTime = String(estimatedTime);
+  }
 
-const [hours, minutes] = arrivalTime.split(':').map(Number);
-const [estimatedMinutes] = estimatedTime.match(/\d+/g).map(Number);
+  const [hours, minutes] = arrivalTime.split(":").map(Number);
+  const [estimatedMinutes] = estimatedTime.match(/\d+/g).map(Number);
 
-const arrivalDate = new Date();
-arrivalDate.setHours(hours);
-arrivalDate.setMinutes(minutes);
+  const arrivalDate = new Date();
+  arrivalDate.setHours(hours);
+  arrivalDate.setMinutes(minutes);
 
-const resultDate = new Date(arrivalDate.getTime() - estimatedMinutes * 60000);
-const result = resultDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-
-
-
-
+  const resultDate = new Date(arrivalDate.getTime() - estimatedMinutes * 60000);
+  const result = resultDate.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
 
   return (
     <Flex justify="center">
@@ -161,13 +177,17 @@ const result = resultDate.toLocaleTimeString('en-US', { hour: '2-digit', minute:
           Summary
         </Heading>
         <Flex
-        marginTop={5}
-        flexDirection="row"
-        textAlign="center"
-        justify="center"
-        gap={250}>
+          marginTop={5}
+          flexDirection="row"
+          textAlign="center"
+          justify="center"
+          gap={250}
+        >
           <Text>
-          <Text fontWeight="bold">Price:</Text> ${order.rideBackPrice ? order.price + order.rideBackPrice : order.price}
+            <Text fontWeight="bold">Price:</Text> $
+            {order.rideBackPrice
+              ? order.price + order.rideBackPrice
+              : order.price}
           </Text>
           <Text>
             <Text fontWeight="bold">Be ready at:</Text> {result}
